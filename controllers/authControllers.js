@@ -34,7 +34,7 @@ const authController = {
             admin: user.admin,                    
         },
         process.env.JWT_ACCESS_KEY,
-        {expiresIn: "60s"}
+        {expiresIn: "1d"}
         )
     },
 
@@ -53,6 +53,7 @@ const authController = {
     loginUser: async(req, res) => {
         try{
             const user = await User.findOne({username: req.body.username});
+            const email = await User.findOne({email: req.body.email});
             if(!user){
                 res.status(404).json("Wrong username!");
             }
@@ -63,7 +64,10 @@ const authController = {
             if(!validPassword){
                 res.status(404).json("Wrong password!");
             }
-            if(user && validPassword){
+            if(!email){
+                res.status(404).json("Wrong email!");
+            }
+            if(user && validPassword && email){
                 const accessToken = authController.generateAccessToken(user);
                 const refreshToken = authController.generateRefreshToken(user);
                 res.cookie("refreshToken", refreshToken, {
