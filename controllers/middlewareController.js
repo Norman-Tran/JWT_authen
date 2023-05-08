@@ -22,7 +22,7 @@ const middlewareController = {
 
     verifyTokenAndAdmin: (req, res, next) => {
         middlewareController.verifyToken(req, res, () => {
-            if(req.user.id == req.params.id || req.user.admin) {
+            if(req.user.id == req.params.id) {
                 next();
             }
             else {
