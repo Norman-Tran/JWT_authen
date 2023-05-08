@@ -6,7 +6,6 @@ const authController = {
   //REGISTER
   registerUser: async (req, res) => {
     try {
-      // const salt = await bcrypt.genSalt(10);
       const hashed = await bcrypt.hash(req.body.password, 10);
 
       //CREATE NEW USER
@@ -68,12 +67,12 @@ const authController = {
       if (user && validPassword) {
         const accessToken = authController.generateAccessToken(user);
         const refreshToken = authController.generateRefreshToken(user);
-        res.cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          secure: false, //set true for deploy
-          path: "/",
-          sameSite: "strict",
-        });
+        // res.cookie("refreshToken", refreshToken, {
+        //   httpOnly: true,
+        //   secure: false, //set true for deploy
+        //   path: "/",
+        //   sameSite: "strict",
+        // });
         const { password, ...others } = user._doc; // FOR NOT RETURNING USER'S PASSWORD
         res.status(200).json({ ...others, accessToken, refreshToken }); // RETURN USER AND ACCESS_TOKEN
       }
@@ -82,26 +81,26 @@ const authController = {
     }
   },
 
-  requestRefreshToken: async (req, res) => {
-    //Take refresh token from user
-    const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) return res.status(401).json("You are not authenticated");
-    jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
-      if (err) {
-        console.log(err);
-      }
-      //Create new access token and refresh token
-      const newAccessToken = authController.generateAccessToken(user);
-      const newRefreshToken = authController.generateRefreshToken(user);
-      res.cookie("refreshToken", newRefreshToken, {
-        httpOnly: true,
-        secure: false, //set true for deploy
-        path: "/",
-        sameSite: "strict",
-      });
-      res.status(200).json({ accessToken: newAccessToken });
-    });
-  },
+  // requestRefreshToken: async (req, res) => {
+  //   //Take refresh token from user
+  //   const refreshToken = req.cookies.refreshToken;
+  //   if (!refreshToken) return res.status(401).json("You are not authenticated");
+  //   jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
+  //     if (err) {
+  //       console.log(err);
+  //     }
+  //     //Create new access token and refresh token
+  //     const newAccessToken = authController.generateAccessToken(user);
+  //     const newRefreshToken = authController.generateRefreshToken(user);
+  //     res.cookie("refreshToken", newRefreshToken, {
+  //       httpOnly: true,
+  //       secure: false, //set true for deploy
+  //       path: "/",
+  //       sameSite: "strict",
+  //     });
+  //     res.status(200).json({ accessToken: newAccessToken });
+  //   });
+  // },
 };
 
 module.exports = authController;

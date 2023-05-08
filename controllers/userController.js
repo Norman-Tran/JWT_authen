@@ -14,7 +14,7 @@ const userController = {
     //DELETE USER
     deleteUser: async (req, res) => {
         try{
-            //change to findByIdAndDelete(req.params.id) to delete user for real
+            //change to findByIdAndDelete(req.params.id) to delete user for deploy
             const user = await User.findById(req.params.id); //fake delete user function
             res.status(200).json("Delete successfully!");
         }catch(err) {
