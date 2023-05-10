@@ -9,5 +9,5 @@ router.post("/register", authController.registerUser);
 router.post("/login", authController.loginUser);
 
 //REFRESH
-router.post("/refresh", authController.requestRefreshToken);
+//router.post("/refresh", authController.requestRefreshToken);
 module.exports = router;
